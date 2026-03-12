@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Player_ns
+﻿namespace Interfaces
 {
     public interface IPlayableCharacter
     {
@@ -12,6 +6,7 @@ namespace Player_ns
         string ImeRazreda { get; set; }
         string DrugoOrožje { get; set; }
         void Heal(int heal);
+        void Attack(IEnemy enemy);
     }
 
     public interface IEnemy
@@ -22,4 +17,5 @@ namespace Player_ns
         void AttackBack(IPlayableCharacter player);
         bool IsDead { get; }
     }
-}
+}    
+

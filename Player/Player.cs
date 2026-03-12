@@ -1,4 +1,6 @@
-﻿namespace Player_ns
+﻿using Interfaces;
+
+namespace Player_ns
 {
     public abstract class Player : IPlayableCharacter
     {
@@ -46,6 +48,8 @@
             p.Heal(heal);
             return p;
         }
+
+        public void Attack(IEnemy enemy) { }
     }
 
     public class Ranger : Player

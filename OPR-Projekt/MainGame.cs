@@ -279,7 +279,6 @@ namespace OPR_Projekt
                 return;
             }
 
-            currentEnemy.AttackBack(igralec);
             PrikažiStatistiko();
 
             if (igralec.Življenje <= 0)
