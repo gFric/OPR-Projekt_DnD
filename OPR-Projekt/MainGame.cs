@@ -51,6 +51,8 @@ namespace OPR_Projekt
             InitGame();
         }
 
+        //test
+
         private Player igralec;
 
         public MainGame(Player igralec)
