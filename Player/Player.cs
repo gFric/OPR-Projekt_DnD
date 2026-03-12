@@ -2,18 +2,29 @@
 {
     public abstract class Player : IPlayableCharacter
     {
-        protected const int maxŽivljenje = 100;
-        protected int življenje;
-        protected string imeRazreda;
+        private const int maxŽivljenje = 100;
+        private int življenje;
+        private string imeRazreda;
+        private int štHealov = 1;
 
-        public string ImeRazreda { get; set; }
+        public int ŠtHealov { get { return štHealov; } set { štHealov = value; } }
+        public string ImeRazreda { get { return imeRazreda; } set { imeRazreda = value; } }
         public int Življenje
         {
             get { return življenje; }
-            set { if (življenje + value < maxŽivljenje) življenje = value; else življenje = maxŽivljenje; }
+            set
+            {
+                if (value <= maxŽivljenje) { življenje = value; }
+                else { življenje = maxŽivljenje; }
+            }
         }
 
         public string DrugoOrožje { get; set; }
+
+        public int Coins { get; set; } = 100;
+        public int item1_cena { get; set; } = 25;
+        public int item2_cena { get; set; } = 25;
+        public int item3_cena { get; set; } = 25;
 
         public Player(string imeRazreda, int začetnoŽivljenje)
         {
@@ -23,18 +34,17 @@
 
         public void Heal(int heal)
         {
-            Življenje += heal;
+            if (življenje + heal <= maxŽivljenje)
+            {
+                Življenje += heal;
+                ŠtHealov--;
+            }
         }
 
         public static Player operator +(Player p, int heal)
         {
             p.Heal(heal);
             return p;
-        }
-
-        public virtual void Attack(IEnemy enemy)
-        {
-            enemy.TakeDamage(10);
         }
     }
 
@@ -46,40 +56,16 @@
         private double[] damageLoka = { 1, 1.5, 2 };
         private string puščica;
         private string lok;
+        public int LevelLoka { get; set; } = 0;
+        public int LevelPuščice { get; set; } = 0;
         public string[] VrstaLoka => vrstaLoka;
         public string[] VrstaPuščice => vrstaPuščice;
 
-        public Ranger() : base("Ranger", 80)
+        public Ranger() : base("Ranger", 70)
         {
             puščica = vrstaPuščice[0];
             lok = vrstaLoka[0];
             DrugoOrožje = "Arrow:";
-        }
-
-        public void SetPuščica(string p)
-        {
-            if (vrstaPuščice.Contains(p))
-            {
-                puščica = p;
-            }
-        }
-
-        public void SetLok(string l)
-        {
-            if (vrstaLoka.Contains(l))
-            {
-                lok = l;
-            }
-        }
-
-        public override void Attack(IEnemy enemy)
-        {
-            int arrowIndex = Array.IndexOf(vrstaPuščice, puščica);
-            int bowIndex = Array.IndexOf(vrstaLoka, lok);
-
-            double damage = damagePuščice[arrowIndex] * damageLoka[bowIndex];
-
-            enemy.TakeDamage((int)damage);
         }
     }
 
@@ -91,29 +77,15 @@
         private double[] zaščitaŠčita = { 1.5, 2, 2.5 };
         private string meč;
         private string ščit;
+        public int LevelMeča { get; set; } = 0;
+        public int LevelŠčita { get; set; } = 0;
         public string[] VrstaMeča => vrstaMeča;
         public string[] VrstaŠčita => vrstaŠčita;
-        public Fighter() : base("Fighter", 100)
+        public Fighter() : base("Fighter", 80)
         {
             ščit = vrstaŠčita[0];
             meč = vrstaMeča[0];
             DrugoOrožje = "Shield:";
-        }
-
-        public void SetMeč(string izbranMeč)
-        {
-            if (vrstaMeča.Contains(izbranMeč))
-            {
-                meč = izbranMeč;
-            }
-        }
-
-        public override void Attack(IEnemy enemy)
-        {
-            int index = Array.IndexOf(vrstaMeča, meč);
-            int damage = damageMeča[index];
-
-            enemy.TakeDamage(damage);
         }
     }
 
@@ -127,6 +99,9 @@
         private double[] damageDamageSpells = { 20, 25, 30, 35 };
         private string[] vrstaProtectionSpells = { "Arcane shield", "Mana shield", "Spell of stone skin" };
         private int[] zaščitaProtectionSpells = { 20, 25, 40 };
+        public int LevelPalice { get; set; } = 0;
+        public int LevelDamageSpell { get; set; } = 0;
+        public int LevelProtectionSpell { get; set; } = 0;
         private string palica;
         private string damageSpell;
         private string protectionSpell;
@@ -142,32 +117,6 @@
             WizardSpell1 = "Spell - damage: ";
             WizardSpell2 = "Spell - protection: ";
         }
-
-        public void SetPalica(string p)
-        {
-            if (vrstaPalice.Contains(p))
-            {
-                palica = p;
-            }
-        }
-
-        public void SetDamageSpell(string s)
-        {
-            if (vrstaDamageSpells.Contains(s))
-            {
-                damageSpell = s;
-            }
-        }
-
-        public override void Attack(IEnemy enemy)
-        {
-            int spellIndex = Array.IndexOf(vrstaDamageSpells, damageSpell);
-            int wandIndex = Array.IndexOf(vrstaPalice, palica);
-
-            double damage = damageDamageSpells[spellIndex] * damagePalice[wandIndex];
-
-            enemy.TakeDamage((int)damage);
-        }
     }
 
     public class Enemy : IEnemy
@@ -177,11 +126,12 @@
 
         private int življenje;
         private int damage;
+        private bool isDead;
 
         public int Življenje
         {
             get { return življenje; }
-            set { if (value <= 100) življenje = value;}
+            set { if (value <= 100) življenje = value; }
         }
 
         public int Damage
@@ -191,8 +141,8 @@
         }
         public bool IsDead
         {
-            get { return IsDead; }
-            set { if (življenje <= 0) IsDead = true; else IsDead = false; }
+            get { return isDead; }
+            set { if (življenje <= 0) isDead = true; else isDead = false; }
         }
 
         public Enemy(int življenje, int damage)
@@ -202,9 +152,9 @@
             Id = ++enemyCount;
         }
 
-        public void TakeDamage(int dmg)
+        public void TakeDamage(int damage)
         {
-            Življenje -= dmg;
+            življenje -= damage;
         }
 
         public void AttackBack(IPlayableCharacter player)
@@ -212,9 +162,9 @@
             player.Življenje -= damage;
         }
 
-        ~Enemy() 
+        ~Enemy()
         {
-        
+
         }
 
     }

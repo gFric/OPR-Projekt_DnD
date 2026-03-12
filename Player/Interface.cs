@@ -12,7 +12,6 @@ namespace Player_ns
         string ImeRazreda { get; set; }
         string DrugoOrožje { get; set; }
         void Heal(int heal);
-        void Attack(IEnemy enemy);
     }
 
     public interface IEnemy

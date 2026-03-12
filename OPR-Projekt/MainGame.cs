@@ -13,6 +13,7 @@ namespace OPR_Projekt
 {
     public partial class MainGame : Form
     {
+        private Player igralec;
         private PictureBox[] enemyPictures;
         private Enemy[] enemies;
         private int currentEnemyIndex = -1;
@@ -25,6 +26,7 @@ namespace OPR_Projekt
             this.KeyDown += MainGame_KeyDown;
             this.KeyUp += MainGame_KeyUp;
 
+
             panel2.Visible = false;
 
             enemyPictures = new PictureBox[]
@@ -36,13 +38,14 @@ namespace OPR_Projekt
 
             enemies = new Enemy[]
             {
-                new Enemy(50, 10),
-                new Enemy(70, 15),
-                new Enemy(100, 20)
+                new Enemy(70, 20),
+                new Enemy(80, 25),
+                new Enemy(100, 50)
             };
 
             timer1.Interval = 16;
             timer1.Start();
+
         }
 
         public MainGame()
@@ -51,9 +54,6 @@ namespace OPR_Projekt
             InitGame();
         }
 
-        //test
-
-        private Player igralec;
 
         public MainGame(Player igralec)
         {
@@ -77,6 +77,7 @@ namespace OPR_Projekt
                 labelDodatno.Text = wizard.WizardSpell1;
                 labelDodatno2.Text = wizard.WizardSpell2;
             }
+            gumbHeal.Text = $"Heal ({igralec.ŠtHealov})";
         }
 
 
@@ -119,6 +120,72 @@ namespace OPR_Projekt
             }
         }
 
+        private void NaložiOrožja()
+        {
+            comboBoxOrozje.Items.Clear();
+            comboBoxDodatno.Items.Clear();
+            comboBoxDodatno2.Items.Clear();
+
+            if (igralec is Wizard wizard)
+            {
+                for (int i = 0; i <= wizard.LevelPalice; i++)
+                {
+                    comboBoxOrozje.Items.Add(wizard.VrstaPalice[i]);
+                }
+                comboBoxOrozje.SelectedIndex = wizard.LevelPalice;
+
+                for (int i = 0; i <= wizard.LevelDamageSpell; i++)
+                {
+                    comboBoxDodatno.Items.Add(wizard.VrstaDamageSpells[i]);
+                }
+                comboBoxDodatno.SelectedIndex = wizard.LevelDamageSpell;
+
+                for (int i = 0; i <= wizard.LevelProtectionSpell; i++)
+                {
+                    comboBoxDodatno2.Items.Add(wizard.VrstaProtectionSpells[i]);
+                }
+                comboBoxDodatno2.SelectedIndex = wizard.LevelProtectionSpell;
+
+                comboBoxDodatno2.Visible = true;
+                labelDodatno2.Visible = true;
+            }
+
+            else if (igralec is Ranger ranger)
+            {
+                for (int i = 0; i <= ranger.LevelLoka; i++)
+                {
+                    comboBoxOrozje.Items.Add(ranger.VrstaLoka[i]);
+                }
+                comboBoxOrozje.SelectedIndex = ranger.LevelLoka;
+
+                for (int i = 0; i <= ranger.LevelPuščice; i++)
+                {
+                    comboBoxDodatno.Items.Add(ranger.VrstaPuščice[i]);
+                }
+                comboBoxDodatno.SelectedIndex = ranger.LevelPuščice;
+
+                comboBoxDodatno2.Visible = false;
+                labelDodatno2.Visible = false;
+            }
+
+            else if (igralec is Fighter fighter)
+            {
+                for (int i = 0; i <= fighter.LevelMeča; i++)
+                {
+                    comboBoxOrozje.Items.Add(fighter.VrstaMeča[i]);
+                }
+                comboBoxOrozje.SelectedIndex = fighter.LevelMeča;
+
+                for (int i = 0; i <= fighter.LevelŠčita; i++)
+                {
+                    comboBoxDodatno.Items.Add(fighter.VrstaŠčita[i]);
+                }
+                comboBoxDodatno.SelectedIndex = fighter.LevelŠčita;
+
+                comboBoxDodatno2.Visible = false;
+                labelDodatno2.Visible = false;
+            }
+        }
 
 
         //premikanje
@@ -151,7 +218,7 @@ namespace OPR_Projekt
             {
                 for (int i = 0; i < enemyPictures.Length; i++)
                 {
-                    if (enemyPictures[i].Visible && pictureBoxPlayer.Bounds.IntersectsWith(enemyPictures[i].Bounds))
+                    if (enemies[i] != null && enemyPictures[i].Visible && pictureBoxPlayer.Bounds.IntersectsWith(enemyPictures[i].Bounds))
                     {
                         StartCombat(i);
                         break;
@@ -186,42 +253,67 @@ namespace OPR_Projekt
             currentEnemy = enemies[index];
             panel2.Visible = true;
             gor = dol = levo = desno = false;
+            labelEnemyŽivljenje.Text = currentEnemy.Življenje.ToString();
         }
 
         private void EndCombat()
         {
             panel2.Visible = false;
             inCombat = false;
-            currentEnemy = null;
             currentEnemyIndex = -1;
         }
 
+        private void Igralec_OnAttack(int damage)
+        {
+            if (currentEnemy == null) { return; }
+
+            labelEnemyŽivljenje.Text = currentEnemy.Življenje.ToString();
+
+            if (currentEnemy.IsDead)
+            {
+                enemyPictures[currentEnemyIndex].Visible = false;
+                igralec.Coins += 25;
+                igralec.ŠtHealov++;
+                PrikažiStatistiko();
+                EndCombat();
+                return;
+            }
+
+            currentEnemy.AttackBack(igralec);
+            PrikažiStatistiko();
+
+            if (igralec.Življenje <= 0)
+            {
+                MessageBox.Show("You died!");
+                Application.Exit();
+                return;
+            }
+
+            EndCombat();
+        }
 
 
         //gumbi
         private void gumbAttack_Click(object sender, EventArgs e)
         {
-            if (currentEnemy == null)
-            {
-                return;
-            }
-            else
-            {
-                igralec.Attack(currentEnemy);
-            }
+            if (currentEnemy == null) return;
 
-            if (currentEnemy.IsDead == false)
+            if (igralec is Wizard wizard)
             {
-                currentEnemy.AttackBack(igralec);
+                wizard.LevelPalice = comboBoxOrozje.SelectedIndex;
+                wizard.LevelDamageSpell = comboBoxDodatno.SelectedIndex;
             }
-            else
+            else if (igralec is Ranger ranger)
             {
-                enemyPictures[currentEnemyIndex].Visible = false;
-                EndCombat();
+                ranger.LevelLoka = comboBoxOrozje.SelectedIndex;
+                ranger.LevelPuščice = comboBoxDodatno.SelectedIndex;
             }
-
-            PrikažiStatistiko();
+            else if (igralec is Fighter fighter)
+            {
+                fighter.LevelMeča = comboBoxOrozje.SelectedIndex;
+            }
         }
+
 
         private void gumbFlee_Click(object sender, EventArgs e)
         {
@@ -230,13 +322,30 @@ namespace OPR_Projekt
 
         private void gumbHeal_Click(object sender, EventArgs e)
         {
-            igralec.Heal(20);
+            if (igralec.ŠtHealov > 0)
+            {
+                igralec.Heal(20);
+                if (igralec.Življenje < 100)
+                {
+                    MessageBox.Show("You have healed yourseft for 20 health");
+                }
+                else if (igralec.Življenje == 100)
+                {
+                    MessageBox.Show("You have overhealed yourseft to 100 health. You can not go further");
+                }
+            }
+            else
+            {
+                MessageBox.Show("You have no heals left");
+            }
             PrikažiStatistiko();
         }
 
-        private void comboBoxOrozje_SelectedIndexChanged(object sender, EventArgs e)
+        private void gumbShop_Click(object sender, EventArgs e)
         {
-
+            Shop shop = new Shop(igralec, this);
+            shop.ShowDialog();
+            NaložiOrožja();
         }
     }
 }
