@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Player_ns;
+using Interfaces;
 
 namespace OPR_Projekt
 {
@@ -59,6 +60,7 @@ namespace OPR_Projekt
         {
             InitializeComponent();
             this.igralec = igralec;
+            this.igralec.OnAttack += Igralec_OnAttack;
             PrikažiStatistiko();
             NaložiComboBox();
             InitGame();
@@ -279,6 +281,7 @@ namespace OPR_Projekt
                 return;
             }
 
+            currentEnemy.AttackBack(igralec);
             PrikažiStatistiko();
 
             if (igralec.Življenje <= 0)
@@ -311,6 +314,8 @@ namespace OPR_Projekt
             {
                 fighter.LevelMeča = comboBoxOrozje.SelectedIndex;
             }
+
+            igralec.Attack(currentEnemy);
         }
 
 

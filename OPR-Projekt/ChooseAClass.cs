@@ -2,6 +2,7 @@ using System;
 using System.Numerics;
 using static OPR_Projekt.MainGame;
 using Player_ns;
+using Interfaces;
 
 namespace OPR_Projekt
 {

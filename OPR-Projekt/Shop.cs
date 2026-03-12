@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Player_ns;
+using Interfaces;
 
 namespace OPR_Projekt
 {
