@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Player_ns;
 using Interfaces;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 
 namespace OPR_Projekt
 {
@@ -20,6 +21,8 @@ namespace OPR_Projekt
         private int currentEnemyIndex = -1;
         private bool inCombat = false;
         private Enemy currentEnemy;
+        private int štPogovorov = 0;
+        private int štMrtvihEnemyjov;
 
         private void InitGame()
         {
@@ -39,9 +42,9 @@ namespace OPR_Projekt
 
             enemies = new Enemy[]
             {
-                new Enemy(70, 20),
-                new Enemy(80, 25),
-                new Enemy(100, 50)
+                new Enemy(75, 25, 0),
+                new Enemy(85, 30, 1),
+                new Enemy(120, 50, 2)
             };
 
             timer1.Interval = 16;
@@ -256,6 +259,7 @@ namespace OPR_Projekt
             panel2.Visible = true;
             gor = dol = levo = desno = false;
             labelEnemyŽivljenje.Text = currentEnemy.Življenje.ToString();
+            StartDialog(currentEnemy);
         }
 
         private void EndCombat()
@@ -276,8 +280,16 @@ namespace OPR_Projekt
                 enemyPictures[currentEnemyIndex].Visible = false;
                 igralec.Coins += 25;
                 igralec.ŠtHealov++;
+                štPogovorov = 0;
                 PrikažiStatistiko();
                 EndCombat();
+
+                if (enemies[0].IsDead && enemies[1].IsDead && enemies[2].IsDead)
+                {
+                    MessageBox.Show("Congratulations! You have successfully saved the kingdom from evil!");
+                    Application.Exit();
+                }
+
                 return;
             }
 
@@ -299,6 +311,9 @@ namespace OPR_Projekt
         private void gumbAttack_Click(object sender, EventArgs e)
         {
             if (currentEnemy == null) return;
+
+            štPogovorov++;
+            StartDialog(currentEnemy);
 
             if (igralec is Wizard wizard)
             {
@@ -350,6 +365,11 @@ namespace OPR_Projekt
             Shop shop = new Shop(igralec, this);
             shop.ShowDialog();
             NaložiOrožja();
+        }
+
+        public void StartDialog(Enemy enemy)
+        {
+            textBoxBesedilo.Text = currentEnemy[currentEnemy.Id, igralec, štPogovorov].ToString();
         }
     }
 }

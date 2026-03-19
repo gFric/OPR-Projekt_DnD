@@ -52,6 +52,8 @@
             pictureBoxEnemy1 = new PictureBox();
             pictureBoxEnemy2 = new PictureBox();
             pictureBoxEnemy3 = new PictureBox();
+            textBoxBesedilo = new TextBox();
+            pictureBox1 = new PictureBox();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             panel3.SuspendLayout();
@@ -59,6 +61,7 @@
             ((System.ComponentModel.ISupportInitialize)pictureBoxEnemy1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBoxEnemy2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBoxEnemy3).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
             // labelStats
@@ -198,7 +201,9 @@
             // 
             // panel2
             // 
-            panel2.BackColor = SystemColors.ActiveCaption;
+            panel2.BackColor = Color.FromArgb(64, 64, 64);
+            panel2.Controls.Add(pictureBox1);
+            panel2.Controls.Add(textBoxBesedilo);
             panel2.Controls.Add(panel3);
             panel2.Controls.Add(gumbFlee);
             panel2.Controls.Add(gumbAttack);
@@ -209,9 +214,9 @@
             // 
             // panel3
             // 
-            panel3.BackColor = Color.Lavender;
+            panel3.BackColor = Color.FromArgb(255, 128, 128);
             panel3.Controls.Add(labelEnemyŽivljenje);
-            panel3.Location = new Point(16, 98);
+            panel3.Location = new Point(16, 104);
             panel3.Name = "panel3";
             panel3.Size = new Size(147, 41);
             panel3.TabIndex = 3;
@@ -219,8 +224,9 @@
             // labelEnemyŽivljenje
             // 
             labelEnemyŽivljenje.AutoSize = true;
-            labelEnemyŽivljenje.BackColor = Color.Lavender;
+            labelEnemyŽivljenje.BackColor = Color.FromArgb(255, 128, 128);
             labelEnemyŽivljenje.Font = new Font("Arial Black", 18F, FontStyle.Bold, GraphicsUnit.Point, 238);
+            labelEnemyŽivljenje.ForeColor = Color.FromArgb(64, 0, 0);
             labelEnemyŽivljenje.Location = new Point(53, 3);
             labelEnemyŽivljenje.Name = "labelEnemyŽivljenje";
             labelEnemyŽivljenje.Size = new Size(52, 33);
@@ -299,6 +305,27 @@
             pictureBoxEnemy3.TabIndex = 12;
             pictureBoxEnemy3.TabStop = false;
             // 
+            // textBoxBesedilo
+            // 
+            textBoxBesedilo.BackColor = Color.FromArgb(64, 64, 64);
+            textBoxBesedilo.BorderStyle = BorderStyle.None;
+            textBoxBesedilo.Font = new Font("Segoe UI Black", 9F, FontStyle.Bold, GraphicsUnit.Point, 238);
+            textBoxBesedilo.ForeColor = Color.White;
+            textBoxBesedilo.Location = new Point(186, 0);
+            textBoxBesedilo.Multiline = true;
+            textBoxBesedilo.Name = "textBoxBesedilo";
+            textBoxBesedilo.Size = new Size(828, 145);
+            textBoxBesedilo.TabIndex = 4;
+            // 
+            // pictureBox1
+            // 
+            pictureBox1.BackgroundImage = Properties.Resources.enemy_dialog_pic;
+            pictureBox1.Location = new Point(19, 3);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(147, 104);
+            pictureBox1.TabIndex = 5;
+            pictureBox1.TabStop = false;
+            // 
             // MainGame
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -319,12 +346,14 @@
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             panel2.ResumeLayout(false);
+            panel2.PerformLayout();
             panel3.ResumeLayout(false);
             panel3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBoxPlayer).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBoxEnemy1).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBoxEnemy2).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBoxEnemy3).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
         }
 
@@ -352,5 +381,7 @@
         private Button gumbFlee;
         private Panel panel3;
         private Label labelEnemyŽivljenje;
+        private PictureBox pictureBox1;
+        private TextBox textBoxBesedilo;
     }
 }

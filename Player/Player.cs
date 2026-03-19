@@ -9,7 +9,7 @@ namespace Player_ns
         private string imeRazreda;
         private int štHealov = 1;
 
-        public int ŠtHealov { get { return štHealov; } set {štHealov = value; } }
+        public int ŠtHealov { get { return štHealov; } set { štHealov = value; } }
         public string ImeRazreda { get { return imeRazreda; } set { imeRazreda = value; } }
         public int Življenje
         {
@@ -62,8 +62,6 @@ namespace Player_ns
 
         public delegate void AttackDelegat(int damage);
         public event AttackDelegat OnAttack;
-
-
     }
 
     public class Ranger : Player
@@ -177,10 +175,12 @@ namespace Player_ns
         private int damage;
         private bool isDead;
 
+        public string besedilo;
+
         public int Življenje
         {
             get { return življenje; }
-            set { if (value <= 100) življenje = value;}
+            set { if (value <= 100) življenje = value; }
         }
 
         public int Damage
@@ -193,11 +193,11 @@ namespace Player_ns
             get { return življenje <= 0; }
         }
 
-        public Enemy(int življenje, int damage)
+        public Enemy(int življenje, int damage, int id)
         {
             this.življenje = življenje;
             this.damage = damage;
-            Id = ++enemyCount;
+            this.Id = id;
         }
 
         public void TakeDamage(int damage)
@@ -226,10 +226,51 @@ namespace Player_ns
             }
         }
 
-        ~Enemy() 
+        ~Enemy()
         {
-        
+
         }
 
+        public string enemyBesedilo;
+
+        public object this[int id, Player igralec, int štPogovorov]
+        {
+            get
+            {
+                if (id == 0)
+                {
+                    switch (štPogovorov)
+                    {
+                        case 0: enemyBesedilo = $"OH so you little {igralec.ImeRazreda} have stubled apon a great battle between me and my powerful allies. I don't think you realize what you got yourself into!"; return enemyBesedilo;
+                        case 1: enemyBesedilo = $"You've got some skills little {igralec.ImeRazreda} but not enough to defeat one of the GREATEST SORCERERS OF ALL TIME!"; return enemyBesedilo;
+                        case 2: enemyBesedilo = $"UGH you think your pathetic attack is enough to defeat ME?! I will NEVER get as low as being killed by an amateur {igralec.ImeRazreda}!"; return enemyBesedilo;
+                        case 3: enemyBesedilo = $"Maybe you think you're close to killing me, but I shall NEVER surrender!"; return enemyBesedilo;
+                    }
+                }
+                else if (id == 1)
+                {
+                    switch (štPogovorov)
+                    {
+                        case 0: enemyBesedilo = $"Well well well, so you little {igralec.ImeRazreda} have defeated my ally and you now suddenly think noone can stop you? Let me lower that ego of yours!"; return enemyBesedilo;
+                        case 1: enemyBesedilo = $"You've got a strong punch in {igralec.ImeRazreda}, but not enough to bring ME down!"; return enemyBesedilo;
+                        case 2: enemyBesedilo = $"Let's see if you can dodge this!!"; return enemyBesedilo;
+                        case 3: enemyBesedilo = $"You will NEVER see me surrender! pathetic {igralec.ImeRazreda}"; return enemyBesedilo;
+                    }
+                }
+                else if (id == 2)
+                {
+                    switch (štPogovorov)
+                    {
+                        case 0: enemyBesedilo = $"So you are stronger than we thought fellow {igralec.ImeRazreda}. Let's settle this for once and for all! You against ME!"; return enemyBesedilo;
+                        case 1: enemyBesedilo = $"You will soon join my allies in the ground {igralec.ImeRazreda}!"; return enemyBesedilo;
+                        case 2: enemyBesedilo = $"I would like to see you try and kill the BRAVEST {igralec.ImeRazreda} OF ALL TIME!"; return enemyBesedilo;
+                        case 3: enemyBesedilo = $"I will NEVER let you win you skilless {igralec.ImeRazreda}!"; return enemyBesedilo;
+                    }
+                }
+
+                return "";
+            }
+
+        }
     }
 }
