@@ -72,6 +72,8 @@ namespace Player_ns
         private double[] damageLoka = { 1, 1.5, 2 };
         private string puščica;
         private string lok;
+        public int SelectedLok;
+        public int SelectedPuščica;
 
         public int LevelLoka { get; set; } = 0;
         public int LevelPuščice { get; set; } = 0;
@@ -87,7 +89,7 @@ namespace Player_ns
 
         public override int ZračunajDamage()
         {
-            double damage = damagePuščice[LevelPuščice] * damageLoka[LevelLoka];
+            double damage = damagePuščice[SelectedPuščica] * damageLoka[SelectedLok];
 
             return (int)damage;
         }
@@ -101,6 +103,8 @@ namespace Player_ns
         private double[] zaščitaŠčita = { 0.8, 0.6, 0.4 };
         private string meč;
         private string ščit;
+        public int SelectedMeč;
+        public int SelectedŠčit;
 
         public int LevelMeča { get; set; } = 0;
         public int LevelŠčita { get; set; } = 0;
@@ -108,7 +112,7 @@ namespace Player_ns
         public string[] VrstaŠčita => vrstaŠčita;
         public double ShieldMultiplier
         {
-            get { return zaščitaŠčita[LevelŠčita]; }
+            get { return zaščitaŠčita[SelectedŠčit]; }
         }
 
         public Fighter() : base("Fighter", 80)
@@ -120,7 +124,7 @@ namespace Player_ns
 
         public override int ZračunajDamage()
         {
-            return damageMeča[LevelMeča];
+            return damageMeča[SelectedMeč];
         }
     }
 
@@ -140,13 +144,16 @@ namespace Player_ns
         private string palica;
         private string damageSpell;
         private string protectionSpell;
+        public int SelectedPalica;
+        public int SelectedDamageSpell;
+        public int SelectedProtectionSpell;
 
         public string[] VrstaPalice => vrstaPalice;
         public string[] VrstaDamageSpells => vrstaDamageSpells;
         public string[] VrstaProtectionSpells => vrstaProtectionSpells;
         public double ProtectionMultiplier
         {
-            get { return zaščitaProtectionSpells[LevelProtectionSpell]; }
+            get { return zaščitaProtectionSpells[SelectedProtectionSpell]; }
         }
 
         public Wizard() : base("Wizard", 60)
@@ -160,7 +167,7 @@ namespace Player_ns
 
         public override int ZračunajDamage()
         {
-            double damage = damageDamageSpells[LevelDamageSpell] * damagePalice[LevelPalice];
+            double damage = damageDamageSpells[SelectedDamageSpell] * damagePalice[SelectedPalica];
 
             return (int)damage;
         }

@@ -137,19 +137,19 @@ namespace OPR_Projekt
                 {
                     comboBoxOrozje.Items.Add(wizard.VrstaPalice[i]);
                 }
-                comboBoxOrozje.SelectedIndex = wizard.LevelPalice;
+                comboBoxOrozje.SelectedIndex = wizard.SelectedPalica;
 
                 for (int i = 0; i <= wizard.LevelDamageSpell; i++)
                 {
                     comboBoxDodatno.Items.Add(wizard.VrstaDamageSpells[i]);
                 }
-                comboBoxDodatno.SelectedIndex = wizard.LevelDamageSpell;
+                comboBoxDodatno.SelectedIndex = wizard.SelectedDamageSpell;
 
                 for (int i = 0; i <= wizard.LevelProtectionSpell; i++)
                 {
                     comboBoxDodatno2.Items.Add(wizard.VrstaProtectionSpells[i]);
                 }
-                comboBoxDodatno2.SelectedIndex = wizard.LevelProtectionSpell;
+                comboBoxDodatno2.SelectedIndex = wizard.SelectedProtectionSpell;
 
                 comboBoxDodatno2.Visible = true;
                 labelDodatno2.Visible = true;
@@ -161,13 +161,13 @@ namespace OPR_Projekt
                 {
                     comboBoxOrozje.Items.Add(ranger.VrstaLoka[i]);
                 }
-                comboBoxOrozje.SelectedIndex = ranger.LevelLoka;
+                comboBoxOrozje.SelectedIndex = ranger.SelectedLok;
 
                 for (int i = 0; i <= ranger.LevelPuščice; i++)
                 {
                     comboBoxDodatno.Items.Add(ranger.VrstaPuščice[i]);
                 }
-                comboBoxDodatno.SelectedIndex = ranger.LevelPuščice;
+                comboBoxDodatno.SelectedIndex = ranger.SelectedPuščica;
 
                 comboBoxDodatno2.Visible = false;
                 labelDodatno2.Visible = false;
@@ -179,13 +179,13 @@ namespace OPR_Projekt
                 {
                     comboBoxOrozje.Items.Add(fighter.VrstaMeča[i]);
                 }
-                comboBoxOrozje.SelectedIndex = fighter.LevelMeča;
+                comboBoxOrozje.SelectedIndex = fighter.SelectedMeč;
 
                 for (int i = 0; i <= fighter.LevelŠčita; i++)
                 {
                     comboBoxDodatno.Items.Add(fighter.VrstaŠčita[i]);
                 }
-                comboBoxDodatno.SelectedIndex = fighter.LevelŠčita;
+                comboBoxDodatno.SelectedIndex = fighter.SelectedŠčit;
 
                 comboBoxDodatno2.Visible = false;
                 labelDodatno2.Visible = false;
@@ -317,17 +317,18 @@ namespace OPR_Projekt
 
             if (igralec is Wizard wizard)
             {
-                wizard.LevelPalice = comboBoxOrozje.SelectedIndex;
-                wizard.LevelDamageSpell = comboBoxDodatno.SelectedIndex;
+                wizard.SelectedPalica = comboBoxOrozje.SelectedIndex;
+                wizard.SelectedDamageSpell = comboBoxDodatno.SelectedIndex;
             }
             else if (igralec is Ranger ranger)
             {
-                ranger.LevelLoka = comboBoxOrozje.SelectedIndex;
-                ranger.LevelPuščice = comboBoxDodatno.SelectedIndex;
+                ranger.SelectedLok = comboBoxOrozje.SelectedIndex;
+                ranger.SelectedPuščica = comboBoxDodatno.SelectedIndex;
             }
             else if (igralec is Fighter fighter)
             {
-                fighter.LevelMeča = comboBoxOrozje.SelectedIndex;
+                fighter.SelectedMeč = comboBoxOrozje.SelectedIndex;
+                fighter.SelectedŠčit = comboBoxDodatno.SelectedIndex;
             }
 
             igralec.Attack(currentEnemy);
